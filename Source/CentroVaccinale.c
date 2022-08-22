@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
     int list_fd, conn_fd;
     struct sockaddr_in serv_add;
     socklen_t len;
-    char buffer[9];
+    char buffer[22];
     pid_t pid;
     
     list_fd=wrapped_socket(AF_INET,SOCK_STREAM,0);
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
             printf("[+] Connesione effettuata da un Client ! \n");
             
             //wrapped_fullread(conn_fd,buffer,sizeof(buffer));
-            read(conn_fd,buffer,sizeof(buffer));
+            wrapped_fullread(conn_fd,buffer,sizeof(buffer));
             printf("[+] Ricevuto Da Client: %s \n",buffer);
 
             char *message = "Ricevuto-Conv";
