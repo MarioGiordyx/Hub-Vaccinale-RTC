@@ -50,6 +50,7 @@ int main(int argc, char *argv[]){
                 }
             close(conn_fd);
             exit(0);
+            printf("[-] Messaggio Mandato, Terminazione Fork \n");
         } else {
             close(0);
         }
