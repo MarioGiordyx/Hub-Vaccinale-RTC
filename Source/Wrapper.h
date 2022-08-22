@@ -14,7 +14,7 @@ void wrapped_bind(int SockDescriptor, struct sockaddr * addr, socklen_t addrlen)
 void wrapped_listen(int SockDescriptor, int connNum);
 int wrapped_accept(int SockDescriptor, struct sockaddr * addr, socklen_t addrlen);
 
-ssize_t wrapped_fullwrite(int fd,void * buf, size_t count);
+ssize_t wrapped_fullwrite(int fd,const void * buf, size_t count);
 ssize_t wrapped_fullread(int fd,void * buf, size_t count);
 
 

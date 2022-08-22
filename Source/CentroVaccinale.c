@@ -8,10 +8,9 @@
 
 int main(int argc, char *argv[]){
     int list_fd, conn_fd;
-    int i;
-    struct sockaddr_in serv_add,client;
+    struct sockaddr_in serv_add;
     socklen_t len;
-    char buffer[2080];
+    char buffer[9];
     pid_t pid;
     
     list_fd=wrapped_socket(AF_INET,SOCK_STREAM,0);
@@ -28,7 +27,6 @@ int main(int argc, char *argv[]){
     printf("[+] Listen in corso\n");
 
     while(1){
-        len = sizeof(client);
         conn_fd = wrapped_accept(list_fd, (struct sockaddr *) NULL,NULL);
         pid=fork();
 
@@ -39,7 +37,8 @@ int main(int argc, char *argv[]){
         if (pid==0){
             printf("[+] Connesione effettuata da un Client ! \n");
             
-            wrapped_fullread(conn_fd,buffer,sizeof(buffer));
+            //wrapped_fullread(conn_fd,buffer,sizeof(buffer));
+            read(conn_fd,buffer,sizeof(buffer));
             printf("[+] Ricevuto Da Client: %s \n",buffer);
 
             char *message = "Ricevuto-Conv";

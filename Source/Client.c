@@ -11,7 +11,7 @@
 int main(int argc, char **argv) {
 	int CVsk,n;
 	char* sendB;
-	char recB[800];
+	char recB[9];
 	struct sockaddr_in servaddr;
 
 	//Controllo argomenti
@@ -38,7 +38,10 @@ int main(int argc, char **argv) {
 	//Write CF
 	sendB=argv[2];
 	wrapped_fullwrite(CVsk,sendB,sizeof(sendB));
+
+	printf("Mess Mandato, Aspetto Rispsota \n");
 	
+	//Read Risp
 	wrapped_fullread(CVsk,recB,sizeof(recB));
 	printf("<Mess Ricevuto da ASL> : %s \n",recB);
 
