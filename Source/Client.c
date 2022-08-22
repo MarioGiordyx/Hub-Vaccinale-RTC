@@ -11,7 +11,7 @@
 int main(int argc, char **argv) {
 	int ASLsk,n;
 	char* sendB;
-	char recB[256];
+	char recB[800];
 	struct sockaddr_in servaddr;
 
 	//Controllo argomenti
