@@ -1,4 +1,4 @@
-#include "wraped.h"
+#include "Wrapper.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -23,17 +23,19 @@ int main(int argc, char **argv) {
 	sendB=argv[2];
 
     //Setting Socket ASL;
-	ASLsk = socket(AF_INET,SOCK_STREAM,0);
+	ASLsk = wrapped_socket(AF_INET,SOCK_STREAM,0);
 	servaddr.sin_family = AF_INET;
-	servaddr.sin_port = htons(20);
+	servaddr.sin_port = htons(28);
 
-
-
-	//Check Connesione
-	if(connect(ASLsk, (struct sockaddr *)&servaddr, sizeof(servaddr))<0) {
-		perror("Connection Lost \n");
+	if(inet_pton(AF_INET,argv[1],&servaddr.sin_addr)<= 0) {
+		fprintf(stderr,"inet_pton error \n");
 		exit(1);
 	}
+
+	//Check Connesione
+	wrapped_connect(ASLsk, (struct sockaddr *)&servaddr, sizeof(servaddr));
+
+	printf("Inizio Mandando CFF a ASL \n");
 
 	//Write CF
 	if(write(ASLsk,sendB,sizeof(sendB)) <0){
