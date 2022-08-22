@@ -9,7 +9,7 @@
 
 
 int main(int argc, char **argv) {
-	int ASLsk,n;
+	int CVsk,n;
 	char* sendB;
 	char recB[800];
 	struct sockaddr_in servaddr;
@@ -20,10 +20,8 @@ int main(int argc, char **argv) {
 		exit(1);
 	} else printf("IP %s, CF %s \n",argv[1],argv[2]);
 
-	sendB=argv[2];
-
     //Setting Socket ASL;
-	ASLsk = wrapped_socket(AF_INET,SOCK_STREAM,0);
+	CVsk = wrapped_socket(AF_INET,SOCK_STREAM,0);
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(28);
 
@@ -33,24 +31,17 @@ int main(int argc, char **argv) {
 	}
 
 	//Check Connesione
-	wrapped_connect(ASLsk, (struct sockaddr *)&servaddr, sizeof(servaddr));
+	wrapped_connect(CVsk, (struct sockaddr *)&servaddr, sizeof(servaddr));
 
 	printf("Inizio Mandando CFF a ASL \n");
 
 	//Write CF
-	if(write(ASLsk,sendB,sizeof(sendB)) <0){
-		fprintf(stderr, "Erorre, non è possibile mandare il CF");
-		exit(1);
-	}
-
-	if(read(ASLsk,recB,sizeof(recB)) <0) {
-		fprintf(stderr, "Erorre, impossibile leggere dato dal server");
-		exit(1);
-	}
+	sendB=argv[2];
+	wrapped_fullwrite(CVsk,sendB,sizeof(sendB));
+	
+	wrapped_fullread(CVsk,recB,sizeof(recB));
 	printf("<Mess Ricevuto da ASL> : %s \n",recB);
 
     exit(0);
-
-	return 0;
 
 }

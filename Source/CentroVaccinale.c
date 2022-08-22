@@ -39,17 +39,12 @@ int main(int argc, char *argv[]){
         if (pid==0){
             printf("[+] Connesione effettuata da un Client ! \n");
             
-            if(read(conn_fd,buffer,sizeof(buffer)) <0) {
-                fprintf(stderr, "Erorre, impossibile leggere dato dal server");
-                 exit(1);
-            }
+            wrapped_fullread(conn_fd,buffer,sizeof(buffer));
             printf("[+] Ricevuto Da Client: %s \n",buffer);
 
-                char *message = "Ricevuto-Conv";
-                if(write(conn_fd,message,sizeof(message)) <0){
-                    fprintf(stderr, "Erorre, non è possibile mandare il CF");
-                    exit(1);
-                }
+            char *message = "Ricevuto-Conv";
+            wrapped_fullwrite(conn_fd,message,sizeof(message));
+            
             printf("[-] Messaggio Mandato, Terminazione Fork \n");
             close(conn_fd);
             exit(0);

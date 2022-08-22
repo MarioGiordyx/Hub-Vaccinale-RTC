@@ -39,13 +39,13 @@ int wrapped_accept(int SockDescriptor, struct sockaddr * addr, socklen_t addrlen
     return CommmSockDescriptor;
 }
 
-ssize_t wrapped_fullwrite(int fd, const void * buf, size_t count){
+ssize_t wrapped_fullwrite(int fd, void * buf, size_t count){
     size_t nleft;
     ssize_t nwritten;
     nleft = count;
     while (nleft > 0) {
-        if ((nwritten == write(fd,buf,nleft)) < 0) {
-            if (errno = EINTR) {
+        if ((nwritten = write(fd,buf,nleft)) < 0) {
+            if (errno == EINTR) {
                 continue;
             } else {
                 exit(nwritten);
@@ -57,7 +57,7 @@ ssize_t wrapped_fullwrite(int fd, const void * buf, size_t count){
     return (nleft);
 }
 
-ssize_t wrapped_fullread(int fd, const void * buf, size_t count){
+ssize_t wrapped_fullread(int fd, void * buf, size_t count){
     size_t nleft;
     ssize_t nread;
     nleft = count;
