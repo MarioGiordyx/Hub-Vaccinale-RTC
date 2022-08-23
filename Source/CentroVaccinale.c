@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Wrapper.h"
-#include "util.h"
 
 int main(int argc, char *argv[]){
     int list_fd, conn_fd;
@@ -44,15 +43,15 @@ int main(int argc, char *argv[]){
 
         // Child
         if (pid==0){
-            close(conn_fd);
-            
-
+        
             //Lettura 8 cifre Tessesa Sanitaria
             printf("[+] Lettura in corso delle 8 cifre mandate da un client \n");
             
             wrapped_fullread(conn_fd,buffer,sizeof(buffer));
             
             printf("[+] Lettura Effetuata, ");
+
+            close(conn_fd);
 
             //Creazione Socket & connesione con ServerV
 
@@ -62,12 +61,12 @@ int main(int argc, char *argv[]){
             printf("[+] Connessione Effettuata al ServerV, creazione Package \n");
 
             //Creazione & invio package
-            struct record_gp * record;
-            record = create_record(buffer,6,0);
+            struct record_gp * new_gp;
+            new_gp = create_record(buffer,6,0);
 
             printf("[+] Record Creato, invio in corso al ServerV");
 
-            wrapped_fullwrite(ServerV_sock,record,sizeof(record));
+            wrapped_fullwrite(ServerV_sock,&new_gp,sizeof(new_gp));
 
             printf("[+] Record inviato, Chiusura Fork");
 

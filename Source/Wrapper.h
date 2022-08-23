@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include "utils.h"
 
 int wrapped_socket(int family, int type, int protocol);
 void wrapped_connect(int SockDescriptor, struct sockaddr * addr, socklen_t addrlen);
