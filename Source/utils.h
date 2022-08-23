@@ -1,7 +1,7 @@
 #ifndef utils_h
 #define utils_h
 
-#include <string.h>
+#include <strings.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,5 +12,6 @@ struct record_gp {
 };
 
 struct record_gp * create_record(char * TS, int durata, int status);
+void printgp(struct record_gp * gp);
 
 #endif

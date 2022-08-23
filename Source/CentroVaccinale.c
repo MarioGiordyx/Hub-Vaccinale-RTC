@@ -1,9 +1,3 @@
-
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "Wrapper.h"
 
 int main(int argc, char *argv[]){
@@ -23,6 +17,7 @@ int main(int argc, char *argv[]){
     //SockAddr del ServerV
     server_v.sin_family = AF_INET;
     server_v.sin_port= htons(31);
+    server_v.sin_addr = server_cv.sin_addr; //Si ipotizza che il server V sia sulla stessa macchina
 
     wrapped_bind(list_fd,(struct sockaddr *)&server_cv,sizeof(server_cv));
 
@@ -64,11 +59,13 @@ int main(int argc, char *argv[]){
             struct record_gp * new_gp;
             new_gp = create_record(buffer,6,0);
 
-            printf("[+] Record Creato, invio in corso al ServerV");
+            printf("[+] Record Creato, invio in corso al ServerV \n");
 
-            wrapped_fullwrite(ServerV_sock,&new_gp,sizeof(new_gp));
+            printgp(new_gp);
 
-            printf("[+] Record inviato, Chiusura Fork");
+            wrapped_fullwrite(ServerV_sock,new_gp,sizeof(struct record_gp));
+
+            printf("[+] Record inviato, Chiusura Fork \n");
 
             close(ServerV_sock);
             

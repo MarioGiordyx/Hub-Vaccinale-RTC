@@ -11,3 +11,12 @@ struct record_gp * create_record(char * TS, int durata, int status){
 
     return out;
 }
+
+void printgp(struct record_gp * gp){
+    if (gp == NULL) {
+        fprintf(stderr,"Errore Print Record Green Pass \n");
+        return;
+    } 
+    printf("Green-Pass: TS: %s, Durata %d \n",gp->TesSan, gp->durata);
+
+}
