@@ -62,7 +62,9 @@ ssize_t wrapped_fullread(int fd,void * buf, size_t count){
     size_t nleft = count;
     ssize_t nread;
 
+    printf(" %zu \n",nleft);
     while (nleft > 0) {
+        printf(" %zu \n",nleft);
         if ((nread = read(fd, buf, nleft)) < 0)  {
             //In Caso di Errore
             if (errno == EINTR) {
@@ -76,7 +78,7 @@ ssize_t wrapped_fullread(int fd,void * buf, size_t count){
             }
         nleft -= nread;
         buf += nread;
-        printf(" %zu \n",nleft);
+        
         }
     }
     buf = 0;
