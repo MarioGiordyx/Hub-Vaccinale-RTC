@@ -38,11 +38,12 @@ int main(int argc, char *argv[]){
             printf("[+] Connesione effettuata da un Client ! \n");
             
             //wrapped_fullread(conn_fd,buffer,sizeof(buffer));
-            wrapped_fullread(conn_fd,buffer,sizeof(buffer));
+            read(conn_fd,buffer,sizeof(buffer));
+            
             printf("[+] Ricevuto Da Client: %s \n",buffer);
 
             char *message = "Ricevuto-Conv";
-            wrapped_fullwrite(conn_fd,message,sizeof(message));
+            wrapped_fullwrite(conn_fd,message,strlen(message));
             
             printf("[-] Messaggio Mandato, Terminazione Fork \n");
             close(conn_fd);

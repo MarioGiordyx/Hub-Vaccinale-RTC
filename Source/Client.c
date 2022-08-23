@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 	sendB=argv[2];
 	sendB[21]='\0';
 
-	wrapped_fullwrite(CVsk,sendB,strlen(sendB)+1);
+	wrapped_fullwrite(CVsk,sendB,strlen(sendB));
 
 	printf("Mess Mandato, Aspetto Rispsota \n");
 	
