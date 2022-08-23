@@ -1,11 +1,30 @@
 #include "Wrapper.h"
 #include "pthread.h" //Gestione tramite MUTEX file .txt
 
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //Dichiarazione globale Mutex;
+
+void CheckWhereFrom(struct record_gp * gp);
+
+void CheckWhereFrom(struct record_gp * gp){
+    if (gp==NULL){
+        fprintf(stderr,"Package Green Pass Vuoto, ritorno \n");
+        return;
+    }
+    if (gp->From=="CV") { //Proviene da CentroVaccinale
+    printf("[+] Registrazione in Corso Richiesta da Centro Vaccinale \n");
+
+    pthread_mutex_lock(&mutex); //Entra in mutua esclusione
+
+
+    }
+}
+
 int main(int argc, char *argv[]){
     int list_fd, conn_fd;
     struct sockaddr_in server_v;
     socklen_t len;
     pid_t pid;
+    FILE *fgp;
 
     list_fd=wrapped_socket(AF_INET,SOCK_STREAM,0);
 
@@ -44,10 +63,18 @@ int main(int argc, char *argv[]){
 
             close(conn_fd);
 
+            //controllo file input
+        if((fv=fopen("vector.txt","r"))==NULL){
+            fprintf(stderr,"Errore apertura file \n");
+             close(list_fd);
+             exit(0);
+        } 
+    
+
 
             close(list_fd);
 
-            printf("[+] Chiusura Connesione e Fork in corso \n");
+            printf("[-] Chiusura Connesione e Fork in corso \n");
 
             printgp(&temp_gp);
 
