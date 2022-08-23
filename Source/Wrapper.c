@@ -65,13 +65,13 @@ ssize_t wrapped_fullread(int fd,void * buf, size_t count){
     nleft = count;
 
     while (nleft > 0) {
-        if ((nread = read(fd, buf, nleft)) <= 0) {
+        if ((nread = read(fd, buf, nleft)) < 0)  {
             //In Caso di Errore
             if (errno == EINTR) {
                 continue;
             } else return nread;
-
         } else {
+            printf("Entro nell'else \n");
             if (nread == 0) {
             break;
             printf("EOF \n");
@@ -82,5 +82,6 @@ ssize_t wrapped_fullread(int fd,void * buf, size_t count){
         }
     }
     buf = 0;
+    printf("Sto uscendo Merde \n");
     return nleft;
 }
