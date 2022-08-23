@@ -61,6 +61,7 @@ int main(int argc, char *argv[]){
             wrapped_connect(ServerV_sock,(struct sockaddr_in *) &server_v, sizeof(server_v));
             printf("[+] Connessione Effettuata al ServerV, creazione Package \n");
 
+            //Creazione & invio package
             struct record_gp * record = create_record(buffer,6,0);
 
             printf("[+] Record Creato, invio in corso al ServerV");
@@ -68,6 +69,8 @@ int main(int argc, char *argv[]){
             wrapped_fullwrite(ServerV_sock,record,sizeof(record));
 
             printf("[+] Record inviato, Chiusura Fork");
+
+            close(ServerV_sock);
             
             exit(0);
         } else {
