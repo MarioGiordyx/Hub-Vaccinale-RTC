@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
 
             //Creazione & invio package
             struct record_gp * new_gp;
-            new_gp = create_record(buffer,6,0);
+            new_gp = create_record(buffer,6,0,"CV");
 
             printf("[+] Record Creato, invio in corso al ServerV \n");
 
