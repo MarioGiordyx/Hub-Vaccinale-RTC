@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
     int list_fd, conn_fd;
     struct sockaddr_in serv_add;
     socklen_t len;
-    char buffer[22];
+    char buffer[21];
     pid_t pid;
     
     list_fd=wrapped_socket(AF_INET,SOCK_STREAM,0);

@@ -64,18 +64,15 @@ ssize_t wrapped_fullread(int fd,void * buf, size_t count){
 
     nleft = count;
 
-    printf(" %zu \n",nleft);
-
     while (nleft > 0) {
         if ((nread = read(fd, buf, nleft)) < 0) {
             if (errno == EINTR) continue;
             else exit(nread);
         } else if (nread == 0) break;
-
         nleft -= nread;
         buf += nread;
+        printf(" %zu \n",nleft);
     }
-
     buf = 0;
     return nleft;
 }
