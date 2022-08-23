@@ -3,18 +3,20 @@
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //Dichiarazione globale Mutex;
 
-void CheckWhereFrom(struct record_gp * gp);
+void CheckWhereFrom(struct record_gp * gp, FILE * fd);
 
-void CheckWhereFrom(struct record_gp * gp){
+void CheckWhereFrom(struct record_gp * gp, FILE * fd){
     if (gp==NULL){
         fprintf(stderr,"Package Green Pass Vuoto, ritorno \n");
         return;
     }
-    if (gp->From=="CV") { //Proviene da CentroVaccinale
+    if (gp->From == 0) { //Proviene da CentroVaccinale
     printf("[+] Registrazione in Corso Richiesta da Centro Vaccinale \n");
 
-    pthread_mutex_lock(&mutex); //Entra in mutua esclusione
+    fwrite(&gp, sizeof(gp), 1, fd);
+    printf("[+] Scrittura Effetuata \n");
 
+    pthread_mutex_lock(&mutex); //Entra in mutua esclusione
 
     }
 }
@@ -25,6 +27,13 @@ int main(int argc, char *argv[]){
     socklen_t len;
     pid_t pid;
     FILE *fgp;
+
+    printf("[+] Open Green-Pass File \n");
+    fgp = fopen("gp.txt","rw");
+    if (fgp == NULL){
+        fprintf(stderr,"Errore Apertura File .txt \n");
+        exit(1);
+    }
 
     list_fd=wrapped_socket(AF_INET,SOCK_STREAM,0);
 
@@ -63,21 +72,13 @@ int main(int argc, char *argv[]){
 
             close(conn_fd);
 
-            //controllo file input
-        if((fv=fopen("vector.txt","r"))==NULL){
-            fprintf(stderr,"Errore apertura file \n");
-             close(list_fd);
-             exit(0);
-        } 
-    
+            printgp(&temp_gp);
 
+            CheckWhereFrom(&temp_gp,fgp);
 
             close(list_fd);
 
             printf("[-] Chiusura Connesione e Fork in corso \n");
-
-            printgp(&temp_gp);
-
 
             exit(0);
 

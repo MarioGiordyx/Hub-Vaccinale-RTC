@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
             
             wrapped_fullread(conn_fd,buffer,sizeof(buffer));
             
-            printf("[+] Lettura Effetuata, ");
+            printf("[+] Lettura Effetuata, creazione Package \n");
 
             close(conn_fd);
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
 
             //Creazione & invio package
             struct record_gp * new_gp;
-            new_gp = create_record(buffer,6,0,"CV");
+            new_gp = create_record(buffer,6,0,0);
 
             printf("[+] Record Creato, invio in corso al ServerV \n");
 

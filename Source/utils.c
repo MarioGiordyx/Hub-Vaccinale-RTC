@@ -1,6 +1,6 @@
 #include "utils.h"
 
-struct record_gp * create_record(char * TS, int durata, int status, char where){
+struct record_gp * create_record(char * TS, int durata, int status, int where){
     //Allocazione dinamica dell' output 
     struct record_gp * out = (struct record_gp *) malloc(sizeof(struct record_gp));
 
@@ -8,7 +8,7 @@ struct record_gp * create_record(char * TS, int durata, int status, char where){
     strncpy(out->TesSan, TS, strlen(TS));
     out->durata= durata;
     out->status = status;
-
+    out->From = where;
     return out;
 }
 
@@ -17,6 +17,6 @@ void printgp(struct record_gp * gp){
         fprintf(stderr,"Errore Print Record Green Pass \n");
         return;
     } 
-    printf("Green-Pass: TS: %s, Durata %d \n",gp->TesSan, gp->durata);
+    printf("Green-Pass: TS: %s, Durata %d, From: %d \n",gp->TesSan, gp->durata, gp->From);
 
 }
