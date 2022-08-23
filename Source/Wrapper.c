@@ -69,7 +69,7 @@ ssize_t wrapped_fullread(int fd,void * buf, size_t count){
             //In Caso di Errore
             if (errno == EINTR) {
                 continue;
-            } else return nread;
+            } else exit(nread);
         } else {
             printf("Entro nell'else \n");
             if (nread == 0) {

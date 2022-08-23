@@ -37,8 +37,7 @@ int main(int argc, char *argv[]){
         if (pid==0){
             printf("[+] Connesione effettuata da un Client ! \n");
             
-            //wrapped_fullread(conn_fd,buffer,sizeof(buffer));
-            read(conn_fd,buffer,sizeof(buffer));
+            wrapped_fullread(conn_fd,buffer,sizeof(buffer));
             
             printf("[+] Ricevuto Da Client: %s \n",buffer);
 
