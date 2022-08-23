@@ -62,7 +62,8 @@ int main(int argc, char *argv[]){
             printf("[+] Connessione Effettuata al ServerV, creazione Package \n");
 
             //Creazione & invio package
-            struct record_gp * record = create_record(buffer,6,0);
+            struct record_gp * record;
+            record = create_record(buffer,6,0);
 
             printf("[+] Record Creato, invio in corso al ServerV");
 
