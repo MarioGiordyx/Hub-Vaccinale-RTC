@@ -59,10 +59,8 @@ ssize_t wrapped_fullwrite(int fd, const void * buf, size_t count){
 }
 
 ssize_t wrapped_fullread(int fd,void * buf, size_t count){
-    size_t nleft;
+    size_t nleft = count;
     ssize_t nread;
-
-    nleft = count;
 
     while (nleft > 0) {
         if ((nread = read(fd, buf, nleft)) < 0)  {
