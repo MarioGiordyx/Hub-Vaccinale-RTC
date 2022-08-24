@@ -2,14 +2,13 @@
 #include "utility/utils.h"
 
 int main(int argc, char **argv) {
-	int ServerGsk;
-	struct record_validate * vd;
-	char validation[2];
-	struct sockaddr_in servaddr;
+    int ServerGsk, validation;
+    struct record_validate * vd;
+    struct sockaddr_in servaddr;
 
-	//Controllo argomenti
-	if (argc != 3) {
-		fprintf(stderr,"Attenzione, il formato di input deve essere : %s <IP-Address>,: %s <Ultime 8 cifre Tessera Sanitaria> \n",argv[1],argv[2]);
+    //Controllo argomenti
+	if (argc != 4) {
+		fprintf(stderr,"Attenzione, il formato di input deve essere : %s <IP-Address>,: %s <Ultime 8 cifre Tessera Sanitaria>, %s <Validate> \n",argv[1],argv[2],argv[3]);
 		exit(1);
 	}
 
@@ -29,7 +28,15 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	//Check HASH per vedere se sono numeri compresi da 0 a 9
+    validation= (int)argv[3] - '0';
+
+    //Check validate
+    if (validation < 0 || validation > 1){
+        fprintf(stderr,"Errore lettura Validazione, deve essere 0(valido) o 1(non valido) \n");
+        exit(1);
+    }
+
+    //Check HASH per vedere se sono numeri compresi da 0 a 9
 	checkHash(argv[2],sizeof(argv[2]));
 
 	//Check Connesione
@@ -39,19 +46,13 @@ int main(int argc, char **argv) {
 
 	printf("Connesione Effetuata al serverG \n");
 
-	vd = create_Vrecord(argv[2],1,2);
+	vd = create_Vrecord(argv[2],2,validation);
+    
+    wrapped_fullwrite(ServerGsk,vd,strlen(vd));
 
-	wrapped_fullwrite(ServerGsk,vd,strlen(vd));
+	printf("Package mandato al serverG, Arrivederci !\n");
 
-	printf("Package mandato al serverG, in attesa di convalida Green Pass...\n");
-
-	wrapped_fullread(ServerGsk, validation, sizeof(validation));
-	printf("Validità Green Pass: %s \n", validation);
-
-	printf("Arrivederci! \n");
-	
-	close(ServerGsk);
+    close(ServerGsk);
 
     exit(0);
-
 }

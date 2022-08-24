@@ -70,9 +70,23 @@ int main( int argc, char *argv[]){
                 close(serverVSK);
 
                 exit(0);
+            } else if (temp_v.From == 2) {//proviene da ClientT
+                int duration;
+                if (temp_v.status == 0){
+                    duration = 6;
+                } else duration = 0;
+
+                struct record_gp * validate_gp = create_record(temp_v.TesSan, duration, temp_v.status,2);
+
+                wrapped_fullwrite(serverVSK, validate_gp, sizeof(validate_gp));
+
+                printf("[+] Package Mandato, Chiusura Fork \n");
+
+                close(conn_fd);
+                close(serverVSK);
+
+                exit(0);
             }
-
-
         } else {
             close(0);
         }
