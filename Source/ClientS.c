@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 
 	printf("Connesione Effetuata al serverG \n");
 
-	vd = create_Vrecord(argv[2],1,3);
+	vd = create_Vrecord(argv[2],1,2);
 
 	wrapped_fullwrite(ServerGsk,vd,strlen(vd));
 
