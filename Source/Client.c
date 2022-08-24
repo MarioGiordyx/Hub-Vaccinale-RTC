@@ -1,5 +1,5 @@
-#include "../utility/Wrapper.h"
-#include "../utility/utils.h"
+#include "utility/Wrapper.h"
+#include "utility/utils.h"
 
 int main(int argc, char **argv) {
 	int CVsk,n;
