@@ -29,6 +29,9 @@ int main(int argc, char **argv) {
 
 	printf("Connesione Effetuata al Centro Vaccinale \n");
 	BufferCF= argv[2];
+
+	//Check HASH per vedere se sono numeri compresi da 0 a 9
+	checkHash(BufferCF,sizeof(BufferCF));
 	
 	wrapped_fullwrite(CVsk,BufferCF,strlen(BufferCF));
 

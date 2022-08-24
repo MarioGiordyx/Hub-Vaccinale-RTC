@@ -20,3 +20,12 @@ void printgp(struct record_gp * gp){
     printf("Green-Pass: TS: %s, Durata %d, From: %d \n",gp->TesSan, gp->durata, gp->From);
 
 }
+
+void checkHash(char * Buffer, int Bsize){
+    for (int i = 0; i < Bsize; i++){
+        if (Buffer[i] > 57 || Buffer[i] < 48) {//Vede se non è compreson del range dei codici HASH dei numeri
+            fprintf(stderr,"Errore Input, non è composta da numeri \n");
+            exit(1);
+        }  
+    }
+}

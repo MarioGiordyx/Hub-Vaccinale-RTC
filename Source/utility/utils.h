@@ -14,5 +14,6 @@ struct record_gp {
 
 struct record_gp * create_record(char * TS, int durata, int status, int where);
 void printgp(struct record_gp * gp);
+void checkHash(char * Buffer, int Bsize);
 
 #endif
