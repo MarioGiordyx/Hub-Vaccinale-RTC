@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 
 	wrapped_fullwrite(ServerGsk,vd,strlen(vd));
 
-	printf("Ultime 8 cifre  mandate al serverG, in attesa di convalida Green Pass...\n");
+	printf("Package mandato al serverG, in attesa di convalida Green Pass...\n");
 
 	wrapped_fullread(ServerGsk, validation, sizeof(validation));
 	printf("Validità Green Pass: %s \n", validation);
