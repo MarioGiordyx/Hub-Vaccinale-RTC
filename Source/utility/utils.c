@@ -29,3 +29,13 @@ void checkHash(char * Buffer, int Bsize){
         }  
     }
 }
+
+struct record_validate * create_Vrecord(char * TS, int From, int status){
+    //Allocazione dinamica dell' output 
+    struct record_validate * out = (struct record_validate *) malloc(sizeof(struct record_validate));
+
+    //Scrittura del Record
+    strncpy(out->TesSan, TS, strlen(TS));
+    out->status = status;
+    return out;
+}

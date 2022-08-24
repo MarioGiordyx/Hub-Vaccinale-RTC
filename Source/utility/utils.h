@@ -19,6 +19,7 @@ struct record_validate {
 };
 
 struct record_gp * create_record(char * TS, int durata, int status, int where);
+struct record_validate * create_Vrecord(char * TS, int From, int status);
 void printgp(struct record_gp * gp);
 void checkHash(char * Buffer, int Bsize);
 

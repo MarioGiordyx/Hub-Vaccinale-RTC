@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv) {
 	int ServerGsk,n;
-	char* BufferCF;
+	struct record_validate * vd;
 	char validation[2];
 	struct sockaddr_in servaddr;
 
@@ -29,10 +29,8 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	BufferCF= argv[2];
-
 	//Check HASH per vedere se sono numeri compresi da 0 a 9
-	checkHash(BufferCF,sizeof(BufferCF));
+	checkHash(argv[2],sizeof(argv[2]));
 
 	//Check Connesione
 	printf("[+] Connesione Al serverG IP : %s \n", argv[1]);
@@ -41,7 +39,9 @@ int main(int argc, char **argv) {
 
 	printf("Connesione Effetuata al serverG \n");
 
-	wrapped_fullwrite(ServerGsk,BufferCF,strlen(BufferCF));
+	vd = create_Vrecord(argv[2],1,3);
+
+	wrapped_fullwrite(ServerGsk,vd,strlen(vd));
 
 	printf("Ultime 8 cifre  mandate al serverG, in attesa di convalida Green Pass...\n");
 
