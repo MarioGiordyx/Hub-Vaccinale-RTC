@@ -2,7 +2,7 @@
 #include "utility/utils.h"
 
 int main(int argc, char **argv) {
-	int CVsk,n;
+	int CVsk;
 	char* BufferCF;
 	struct sockaddr_in servaddr;
 
