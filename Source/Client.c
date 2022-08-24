@@ -22,16 +22,18 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
+	BufferCF= argv[2];
+
+	//Check HASH per vedere se sono numeri compresi da 0 a 9
+	checkHash(BufferCF,sizeof(BufferCF));
+
 	//Check Connesione
 	printf("[+] Connesione Al centro vaccinale IP : %s \n", argv[1]);
 
 	wrapped_connect(CVsk, (struct sockaddr *)&servaddr, sizeof(servaddr));
 
 	printf("Connesione Effetuata al Centro Vaccinale \n");
-	BufferCF= argv[2];
 
-	//Check HASH per vedere se sono numeri compresi da 0 a 9
-	checkHash(BufferCF,sizeof(BufferCF));
 	
 	wrapped_fullwrite(CVsk,BufferCF,strlen(BufferCF));
 
