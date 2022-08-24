@@ -22,6 +22,12 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
+	//Check se l' input della TS è di 8 cifre
+	if (strlen(argv[2]) <= 0 || strlen(argv[2]) > 8){
+		fprintf(stderr,"Errore Input Tessera Sanitaria, size troppo piccolo \n");
+		exit(1);
+	}
+
 	BufferCF= argv[2];
 
 	//Check HASH per vedere se sono numeri compresi da 0 a 9
