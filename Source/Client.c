@@ -40,7 +40,6 @@ int main(int argc, char **argv) {
 
 	printf("Connesione Effetuata al Centro Vaccinale \n");
 
-	
 	wrapped_fullwrite(CVsk,BufferCF,strlen(BufferCF));
 
 	printf("Ultime 8 cifre  mandate al Centro Vaccinale, Arrivederci !\n");

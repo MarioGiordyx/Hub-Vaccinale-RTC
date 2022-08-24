@@ -15,6 +15,7 @@ void CheckWhereFrom(struct record_gp * gp, FILE * fd){
     printf("[+] Registrazione in Corso Richiesta da Centro Vaccinale \n");
 
     fwrite(&gp, sizeof(gp), 1, fd);
+    fwrite("\r\n",sizeof(char),1,fd);
     printf("[+] Scrittura Effetuata \n");
 
     pthread_mutex_lock(&mutex); //Entra in mutua esclusione
