@@ -12,6 +12,12 @@ struct record_gp {
     int status; // Stato Green Pass, 0 valido, 1 scaduto
 };
 
+struct record_validate {
+    char TesSan[8]; //ultime 8 cifre tessera sanitaria
+    int From; // indentificatore per vedere da dove provenie 0 CentroVaccinale, 1 ClientS , 2 ClientT
+    int status; // Stato Green Pass, 0 valido, 1 scaduto, 2 verifica
+};
+
 struct record_gp * create_record(char * TS, int durata, int status, int where);
 void printgp(struct record_gp * gp);
 void checkHash(char * Buffer, int Bsize);
