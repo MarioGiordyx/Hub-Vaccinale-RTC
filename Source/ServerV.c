@@ -1,4 +1,5 @@
-#include "Wrapper.h"
+#include "../utility/Wrapper.h"
+#include "../utility/utils.h"
 #include "pthread.h" //Gestione tramite MUTEX file .txt
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //Dichiarazione globale Mutex;
@@ -29,7 +30,7 @@ int main(int argc, char *argv[]){
     FILE *fgp;
 
     printf("[+] Open Green-Pass File \n");
-    fgp = fopen("gp.txt","rw");
+    fgp = fopen("gp.txt","r+");
     if (fgp == NULL){
         fprintf(stderr,"Errore Apertura File .txt \n");
         exit(1);
