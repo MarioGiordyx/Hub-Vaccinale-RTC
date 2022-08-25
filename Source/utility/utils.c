@@ -58,7 +58,6 @@ void SearchInto(struct record_gp * gp, FILE * fp, FILE * fg){
     while(read>0){
             rewind(fp);
             fscanf(fp,"%s \n",tempo);
-            printf("Tempo : %s\n",tempo);
             
             strncpy(TS,tempo,8);
             TS[8]='\0';
@@ -67,11 +66,10 @@ void SearchInto(struct record_gp * gp, FILE * fp, FILE * fg){
             TG[8]='\0';
 
             what=strcmp(TG,TS);
-            printf("%d \n",what);
 
             if(what==0){
                 printf("[+] record esistente uscita \n");
-
+                return;
             }
 
             read--;
