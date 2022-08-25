@@ -49,8 +49,6 @@ int main(int argc, char **argv) {
 	printf("Validità Green Pass: %s \n", validation);
 
 	printf("Arrivederci! \n");
-	
-	close(ServerGsk);
 
     exit(0);
 

@@ -40,32 +40,63 @@ struct record_validate * create_Vrecord(char * TS, int From, int status){
     return out;
 }
 
-struct record_gp * SearchInto(struct record_gp * gp, FILE * fp){
-    ssize_t read;
-    struct record_validate * temp = (struct record_validate *) malloc(sizeof(struct record_validate)); //Temp
+void SearchInto(struct record_gp * gp, FILE * fp, FILE * fg){
+    int read;
+    char tempo[10];
+    char TS[9];
+    char TG[9];
+    char c;
+    int what = 0;
+    rewind(fp);
+    
+    do {
+        c = fgetc(fp);
+        if (c == '\n') read++;
+    } while(c != EOF);
 
-    while(((read = getline(&temp,sizeof(temp),fp))) != -1){
-            // fscanf(fd,"\n\r",temp);
-           if (strcmp(gp->TesSan,temp->TesSan)) {
-                return temp;
-          } 
+    rewind(fp);
+    while(read>0){
+            rewind(fp);
+            fscanf(fp,"%s \n",tempo);
+            printf("Tempo : %s\n",tempo);
+            
+            strncpy(TS,tempo,8);
+            TS[8]='\0';
+
+            strncpy(TG,gp->TesSan,8);
+            TG[8]='\0';
+
+            what=strcmp(TG,TS);
+            printf("%d \n",what);
+
+            if(what==0){
+                printf("[+] record esistente uscita \n");
+
+            }
+
+            read--;
         }
-    return NULL;
+        printf("[+] record non trovato, inizio scrittura \n");
+        //Write singoli elementi
+         char gpp[12];
+         sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
+         fwrite(gpp,sizeof(gpp)-1,1,fg);
+        printf("[+] Scrittura Effetuata \n");
+        return;
 }
 
-int SearchModifyRecord (struct record_gp * gp, FILE * fp){
-     ssize_t read;
-    struct record_validate * temp = (struct record_validate *) malloc(sizeof(struct record_validate)); //Temp
+int SearchModifyRecord (struct record_gp * gp, FILE * fp, FILE * fg){
+    ssize_t read;
+    struct record_gp * temp; //Temp
+    rewind(fp);
 
-    while(((read = getline(&temp,sizeof(temp),fp))) != -1){
-            // fscanf(fd,"\n\r",temp);
-
+    while(fread(&temp,sizeof(struct record_gp),1, fp)){
            if (strcmp(gp->TesSan,temp->TesSan)) {
                 fseek(fp,0,SEEK_CUR); //Pointer sul posto corrente
                 temp->status=gp->status; //modifica stato
 
                 //OverWrite con record modificato
-                fwrite(temp,sizeof(temp),1,fp);
+                fwrite(&temp,sizeof(temp),1,fp);
                 fwrite("\r\n",sizeof(char),1,fp);
                 return 1;
           } 

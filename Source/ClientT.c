@@ -52,7 +52,5 @@ int main(int argc, char **argv) {
 
 	printf("Package mandato al serverG, Arrivederci !\n");
 
-    close(ServerGsk);
-
     exit(0);
 }

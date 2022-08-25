@@ -43,8 +43,6 @@ int main(int argc, char **argv) {
 	wrapped_fullwrite(CVsk,BufferCF,strlen(BufferCF));
 
 	printf("Ultime 8 cifre  mandate al Centro Vaccinale, Arrivederci !\n");
-	
-	close(CVsk);
 
     exit(0);
 

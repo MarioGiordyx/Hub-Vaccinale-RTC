@@ -1,45 +1,37 @@
 #include "utility/Wrapper.h"
 #include "utility/utils.h"
+#include <string.h>
 #include "pthread.h" //Gestione tramite MUTEX file .txt
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //Dichiarazione globale Mutex;
 
-int CheckWhereFrom(struct record_gp * gp, FILE * fd);
+int CheckWhereFrom(struct record_gp * gp, FILE * fd, FILE * fg);
 
-int CheckWhereFrom(struct record_gp * gp, FILE * fd){
+int CheckWhereFrom(struct record_gp * gp, FILE * fd, FILE * fg){
     if (gp==NULL){
         fprintf(stderr,"Package Green Pass Vuoto, ritorno \n");
         return -1;
     }
     if (gp->From == 0) { //Proviene da CentroVaccinale
-    printf("[+] Registrazione in Corso Richiesta da Centro Vaccinale \n");
-
+ 
     pthread_mutex_lock(&mutex); //Entra in mutua esclusione
-
-     struct record_gp * temp = SearchInto(gp,fd);
-        if (temp != NULL) {// Sia gia presente
-            printf("[+] record gia presente \n");
-            pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
-            return 3;
-        }
-
-    fwrite(&gp, sizeof(gp), 1, fd);
-    fwrite("\r\n",sizeof(char),1,fd);
-    printf("[+] Scrittura Effetuata \n");
-    pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
+    printf("[+] Entro in Mutua Esclusione \n");
+    SearchInto(gp,fd,fg);
+    pthread_mutex_unlock(&mutex);
     return 3;
+    
     } else if (gp->From == 1) { //Proviene da ServerG, richiesta di ClientS
         pthread_mutex_lock(&mutex); 
-        struct record_gp * temp = SearchInto(gp,fd);
+        struct record_gp * temp; //= SearchInto(gp,fg);
         pthread_mutex_unlock(&mutex);
 
         if (temp == NULL) return -1; // Caso sia nullo
         return temp->status;
     } if (gp->From == 2) {// Proviene da ServerG, richeista di ClientT
-        printf("[+] Cerco Record \n");
+        printf("[+] Cerco Recrd \n");
 
         pthread_mutex_lock(&mutex); //Entra in mutua esclusione
-        int v = SearchModifyRecord(gp,fd);
+        int v = SearchModifyRecord(gp,fd,fg);
         pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
 
         if (v == 0) {// non sia presente
@@ -60,12 +52,15 @@ int main(int argc, char *argv[]){
     struct sockaddr_in server_v;
     socklen_t len;
     pid_t pid;
-    FILE *fgp;
+    FILE *fgpr;
+    FILE *fgpw;
     char respond[2];
 
     printf("[+] Open Green-Pass File \n");
-    fgp = fopen("gp.txt","r+");
-    if (fgp == NULL){
+    fgpr = fopen("gp.txt","r");
+    fgpw = fopen("gp.txt","w");
+
+    if (fgpr == NULL || fgpw == NULL){
         fprintf(stderr,"Errore Apertura File .txt \n");
         exit(1);
     }
@@ -98,7 +93,7 @@ int main(int argc, char *argv[]){
         if (pid==0){
             //Lettura in input packeg
             struct record_gp temp_gp;
-
+            
             printf("[+] Lettura Package dal Socket \n");
 
             wrapped_fullread(conn_fd,&temp_gp,sizeof(struct record_gp));
@@ -107,9 +102,9 @@ int main(int argc, char *argv[]){
 
             close(conn_fd);
 
-            printgp(&temp_gp);
+            printf(" \n");
 
-            int v = CheckWhereFrom(&temp_gp,fgp); //Verifica se richiesta è avvenuta
+            int v = CheckWhereFrom(&temp_gp,fgpr,fgpw); //Verifica se richiesta è avvenuta
             
             //switch per i 3 casi di richiesta (1 non validio, 2 valido, 3 modifica)
             switch(v){
@@ -138,7 +133,7 @@ int main(int argc, char *argv[]){
             close(conn_fd);
 
             printf("[-] Chiusura Connesione e Fork in corso \n");
-
+            
             exit(0);
 
         } else {
