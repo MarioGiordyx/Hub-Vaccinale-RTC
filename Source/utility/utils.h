@@ -20,9 +20,9 @@ struct record_validate {
 
 struct record_gp * create_record(char * TS, int durata, int status, int where);
 struct record_validate * create_Vrecord(char * TS, int From, int status);
-void SearchInto(struct record_gp * gp, FILE * fp, FILE * fg);
+void SearchInto(struct record_gp * gp);
 
-int SearchModifyRecord (struct record_gp * gp, FILE * fp, FILE *fg);
+int SearchModifyRecord (struct record_gp * gp);
 
 void printgp(struct record_gp * gp);
 void checkHash(char * Buffer, int Bsize);

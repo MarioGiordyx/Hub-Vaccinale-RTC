@@ -40,13 +40,19 @@ struct record_validate * create_Vrecord(char * TS, int From, int status){
     return out;
 }
 
-void SearchInto(struct record_gp * gp, FILE * fp, FILE * fg){
+void SearchInto(struct record_gp * gp){
+
+    FILE *fp;
+    FILE *fg;
     int read;
     char tempo[10];
     char TS[9];
     char TG[9];
     char c;
     int what = 0;
+
+    fg = fopen("gp.txt","wa");
+    fp = fopen("gp.txt","r");
     rewind(fp);
     
     do {
@@ -55,6 +61,7 @@ void SearchInto(struct record_gp * gp, FILE * fp, FILE * fg){
     } while(c != EOF);
 
     rewind(fp);
+    rewind(fg);
     while(read>0){
             rewind(fp);
             fscanf(fp,"%s \n",tempo);
@@ -80,9 +87,13 @@ void SearchInto(struct record_gp * gp, FILE * fp, FILE * fg){
          sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
          fwrite(gpp,sizeof(gpp)-1,1,fg);
         printf("[+] Scrittura Effetuata \n");
+
+        fclose(fg);
+        fclose(fp);
         return;
 }
 
+/*
 int SearchModifyRecord (struct record_gp * gp, FILE * fp, FILE * fg){
     ssize_t read;
     struct record_gp * temp; //Temp
@@ -102,3 +113,4 @@ int SearchModifyRecord (struct record_gp * gp, FILE * fp, FILE * fg){
     return 0;
 
 }
+*/

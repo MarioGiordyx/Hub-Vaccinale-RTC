@@ -5,9 +5,9 @@
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //Dichiarazione globale Mutex;
 
-int CheckWhereFrom(struct record_gp * gp, FILE * fd, FILE * fg);
+int CheckWhereFrom(struct record_gp * gp);
 
-int CheckWhereFrom(struct record_gp * gp, FILE * fd, FILE * fg){
+int CheckWhereFrom(struct record_gp * gp){
     if (gp==NULL){
         fprintf(stderr,"Package Green Pass Vuoto, ritorno \n");
         return -1;
@@ -16,7 +16,7 @@ int CheckWhereFrom(struct record_gp * gp, FILE * fd, FILE * fg){
  
     pthread_mutex_lock(&mutex); //Entra in mutua esclusione
     printf("[+] Entro in Mutua Esclusione \n");
-    SearchInto(gp,fd,fg);
+    SearchInto(gp);
     pthread_mutex_unlock(&mutex);
     return 3;
     
@@ -28,6 +28,7 @@ int CheckWhereFrom(struct record_gp * gp, FILE * fd, FILE * fg){
         if (temp == NULL) return -1; // Caso sia nullo
         return temp->status;
     } if (gp->From == 2) {// Proviene da ServerG, richeista di ClientT
+        /*
         printf("[+] Cerco Recrd \n");
 
         pthread_mutex_lock(&mutex); //Entra in mutua esclusione
@@ -41,7 +42,7 @@ int CheckWhereFrom(struct record_gp * gp, FILE * fd, FILE * fg){
             printf("[+] Record Modificato");
         }
         return 2;
-
+        */
     }
 
     return -1;
@@ -52,18 +53,19 @@ int main(int argc, char *argv[]){
     struct sockaddr_in server_v;
     socklen_t len;
     pid_t pid;
-    FILE *fgpr;
-    FILE *fgpw;
+    FILE * ver;
+
     char respond[2];
 
     printf("[+] Open Green-Pass File \n");
-    fgpr = fopen("gp.txt","r");
-    fgpw = fopen("gp.txt","w");
+    ver = fopen("gp.txt","a");
 
-    if (fgpr == NULL || fgpw == NULL){
+    if (ver == NULL){
         fprintf(stderr,"Errore Apertura File .txt \n");
         exit(1);
     }
+
+    fclose(ver);
 
     list_fd=wrapped_socket(AF_INET,SOCK_STREAM,0);
 
@@ -104,7 +106,7 @@ int main(int argc, char *argv[]){
 
             printf(" \n");
 
-            int v = CheckWhereFrom(&temp_gp,fgpr,fgpw); //Verifica se richiesta è avvenuta
+            int v = CheckWhereFrom(&temp_gp); //Verifica se richiesta è avvenuta
             
             //switch per i 3 casi di richiesta (1 non validio, 2 valido, 3 modifica)
             switch(v){
