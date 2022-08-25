@@ -4,23 +4,55 @@
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; //Dichiarazione globale Mutex;
 
-void CheckWhereFrom(struct record_gp * gp, FILE * fd);
+int CheckWhereFrom(struct record_gp * gp, FILE * fd);
 
-void CheckWhereFrom(struct record_gp * gp, FILE * fd){
+int CheckWhereFrom(struct record_gp * gp, FILE * fd){
     if (gp==NULL){
         fprintf(stderr,"Package Green Pass Vuoto, ritorno \n");
-        return;
+        return -1;
     }
     if (gp->From == 0) { //Proviene da CentroVaccinale
     printf("[+] Registrazione in Corso Richiesta da Centro Vaccinale \n");
 
     pthread_mutex_lock(&mutex); //Entra in mutua esclusione
+
+     struct record_gp * temp = SearchInto(gp,fd);
+        if (temp != NULL) {// Sia gia presente
+            printf("[+] record gia presente \n");
+            pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
+            return 3;
+        }
+
     fwrite(&gp, sizeof(gp), 1, fd);
     fwrite("\r\n",sizeof(char),1,fd);
     printf("[+] Scrittura Effetuata \n");
     pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
+    return 3;
+    } else if (gp->From == 1) { //Proviene da ServerG, richiesta di ClientS
+        pthread_mutex_lock(&mutex); 
+        struct record_gp * temp = SearchInto(gp,fd);
+        pthread_mutex_unlock(&mutex);
+
+        if (temp == NULL) return -1; // Caso sia nullo
+        return temp->status;
+    } if (gp->From == 2) {// Proviene da ServerG, richeista di ClientT
+        printf("[+] Cerco Record \n");
+
+        pthread_mutex_lock(&mutex); //Entra in mutua esclusione
+        int v = SearchModifyRecord(gp,fd);
+        pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
+
+        if (v == 0) {// non sia presente
+            printf("[+] record non presente \n");
+            
+        } else if (v == 1) {
+            printf("[+] Record Modificato");
+        }
+        return 2;
 
     }
+
+    return -1;
 }
 
 int main(int argc, char *argv[]){
@@ -29,6 +61,7 @@ int main(int argc, char *argv[]){
     socklen_t len;
     pid_t pid;
     FILE *fgp;
+    char respond[2];
 
     printf("[+] Open Green-Pass File \n");
     fgp = fopen("gp.txt","r+");
@@ -76,9 +109,33 @@ int main(int argc, char *argv[]){
 
             printgp(&temp_gp);
 
-            CheckWhereFrom(&temp_gp,fgp);
+            int v = CheckWhereFrom(&temp_gp,fgp); //Verifica se richiesta è avvenuta
+            
+            //switch per i 3 casi di richiesta (1 non validio, 2 valido, 3 modifica)
+            switch(v){
+                case 0: // Caso Richiesta da ClientS valido
+                printf("[+] Validazione effetuata, invio report \n");
+                snprintf(respond,sizeof(respond),"SI");
+                wrapped_fullwrite(conn_fd,respond,sizeof(respond));
+                break;
 
-            close(list_fd);
+                case 1: //Caso Richiesta da ClientS non valido
+                printf("[+] Validazione effetuata, invio report \n");
+                snprintf(respond,sizeof(respond),"NO");
+                wrapped_fullwrite(conn_fd,respond,sizeof(respond));
+                break;
+
+                case 2:
+                break;
+
+                case 3:
+                break;
+
+                default:
+                fprintf(stderr,"Errore risposta Richiesta, Richiesta non elaborabile \n");
+            }
+
+            close(conn_fd);
 
             printf("[-] Chiusura Connesione e Fork in corso \n");
 
