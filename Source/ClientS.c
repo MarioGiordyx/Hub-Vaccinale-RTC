@@ -4,7 +4,7 @@
 int main(int argc, char **argv) {
 	int ServerGsk;
 	struct record_validate * vd;
-	char validation[2];
+	char validation[4];
 	struct sockaddr_in servaddr;
 
 	//Controllo argomenti

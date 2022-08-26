@@ -101,8 +101,6 @@ int main(int argc, char *argv[]){
             
             printf("[+] Lettura package fatto \n");
 
-            close(conn_fd);
-
             printf(" \n");
 
             int v = CheckWhereFrom(&temp_gp,fd); //Verifica se richiesta è avvenuta
@@ -111,15 +109,15 @@ int main(int argc, char *argv[]){
             switch(v){
                 case 0: // Caso Richiesta da ClientS valido
                 printf("[+] Validazione effetuata, invio report \n");
-                respons="SI";
-                wrapped_fullwrite(conn_fd,respons,sizeof(respons));
+                respons="SI\0";
+                wrapped_fullwrite(conn_fd,respons,strlen(respons));
                 printf("[+] Validazione Inviata \n");
                 break;
 
                 case 1: //Caso Richiesta da ClientS non valido
                 printf("[+] Validazione effetuata, invio report \n");
-                respons="NO";
-                wrapped_fullwrite(conn_fd,respons,sizeof(respons));
+                respons="NO\0";
+                wrapped_fullwrite(conn_fd,respons,strlen(respons));
                 printf("[+] Validazione Inviata \n");
                 break;
 

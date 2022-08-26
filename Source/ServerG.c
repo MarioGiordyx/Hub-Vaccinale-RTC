@@ -53,7 +53,7 @@ int main( int argc, char *argv[]){
                 printf("[+] Richiesta Ricevuta da ClientS \n");
                 struct record_gp* check_gp;
                 char buffer[8];
-                char risposta[8];
+                char risposta[4];
                 strncpy(buffer,temp_v.TesSan,sizeof(buffer));
                 printf("%s \n",buffer);
 

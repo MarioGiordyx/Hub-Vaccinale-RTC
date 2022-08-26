@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 
 struct record_gp {
     char TesSan[8]; //ultime 8 cifre tessera sanitaria
