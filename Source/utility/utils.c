@@ -109,10 +109,10 @@ int SearchModifyRecord (struct record_gp * gp, int fd){
     if (dove != 0) {//Caso esista
 
     //Creazione rewrite
-
+    lseek(fd,(dove-1),SEEK_SET);
     char gpp[12];
     sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
-    pwrite(fd,gpp,sizeof(gpp)-1,(dove-1));
+    write(fd,gpp,sizeof(gpp));
 
     return 1;
     } else return 0;
