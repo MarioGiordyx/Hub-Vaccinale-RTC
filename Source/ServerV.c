@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
 
     printf("[+] Open Green-Pass File \n");
 
-    if ((fd = open("gp.txt", O_RDWR | O_CREAT | O_APPEND, 0777)) < 1){
+    if ((fd = open("gp.txt", O_RDWR | O_CREAT, 0777)) < 1){
         fprintf(stderr,"Errore Apertura File .txt \n");
         exit(1);
     }
