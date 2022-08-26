@@ -97,7 +97,6 @@ off_t whereisit(int fd, char * TS){
             temp += 12;
         }
     }
-    printf("non esiste \n");
     temp = 0;
     return temp;
 }
@@ -105,15 +104,15 @@ off_t whereisit(int fd, char * TS){
 
 int SearchModifyRecord (struct record_gp * gp, int fd){
     off_t dove = whereisit(fd, gp->TesSan);
+    printf("%lld \n",dove);
 
     if (dove != 0) {//Caso esista
-    lseek(fd,dove,SEEK_SET);
 
     //Creazione rewrite
 
     char gpp[12];
     sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
-    write(fd,gpp,sizeof(gpp)-1);
+    pwrite(fd,gpp,sizeof(gpp)-1,(dove-1));
 
     return 1;
     } else return 0;

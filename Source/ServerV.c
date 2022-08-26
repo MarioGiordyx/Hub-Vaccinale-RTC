@@ -34,20 +34,18 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
         
     } else{
         if (gp->From == 2) {// Proviene da ServerG, richeista di ClientT
-        printf("[+] Cerco Recrd \n");
+        printf("[+] Cerco Record \n");
         int v = 3;
 
         pthread_mutex_lock(&mutex); //Entra in mutua esclusione
          v = SearchModifyRecord(gp,fd);
         pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
 
-        printf("%d\n",v);
-
         if (v == 0) {// non sia presente
             printf("[+] record non presente \n");
             
         } else if (v == 1) {
-            printf("[+] Record Modificato");
+            printf("[+] Record Modificato  \n");
         }
         return 2;
 
