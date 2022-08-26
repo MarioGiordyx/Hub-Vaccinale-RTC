@@ -36,6 +36,7 @@ struct record_validate * create_Vrecord(char * TS, int From, int status){
 
     //Scrittura del Record
     strncpy(out->TesSan, TS, strlen(TS));
+    out->From=From;
     out->status = status;
     return out;
 }
@@ -62,6 +63,21 @@ void SearchInto(struct record_gp * gp, int fp){
          write(fp,gpp,sizeof(gpp)-1);
         printf("[+] Scrittura Effetuata \n");
         return;
+}
+
+int SeeStatus(char * TS, int fp) {
+    char buffT[10];
+    char status;
+    off_t dove = whereisit(fp, TS);
+    if (dove != 0) {//Caso esista
+    fseek(fp,dove,SEEK_SET);
+
+    read(fp,buffT,sizeof(buffT));
+
+    return atoi(buffT[8]);
+    } else {
+        return  3;
+    }
 }
 
 off_t whereisit(int fd, char * TS){

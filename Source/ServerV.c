@@ -21,17 +21,21 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
     return 3;
     
     } else if (gp->From == 1) { //Proviene da ServerG, richiesta di ClientS
+        int stat = 0;
         pthread_mutex_lock(&mutex); 
-        struct record_gp * temp; //= SearchInto(gp,fg);
+        stat = SeeStatus(gp->TesSan,fd);
         pthread_mutex_unlock(&mutex);
-
-        if (temp == NULL) return -1; // Caso sia nullo
-        return temp->status;
+        printf("%d\n",stat);
+        if (stat == 3){
+            return 1;
+        }
+        return stat;
+        
     } if (gp->From == 2) {// Proviene da ServerG, richeista di ClientT
         printf("[+] Cerco Recrd \n");
 
         pthread_mutex_lock(&mutex); //Entra in mutua esclusione
-        int v = SearchModifyRecord(gp,fd,fd);
+       int v = SearchModifyRecord(gp,fd,fd);
         pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
 
         if (v == 0) {// non sia presente
@@ -52,7 +56,7 @@ int main(int argc, char *argv[]){
     struct sockaddr_in server_v;
     socklen_t len;
     pid_t pid;
-    char respond[2];
+    char respons[3];
 
     printf("[+] Open Green-Pass File \n");
 
@@ -107,14 +111,16 @@ int main(int argc, char *argv[]){
             switch(v){
                 case 0: // Caso Richiesta da ClientS valido
                 printf("[+] Validazione effetuata, invio report \n");
-                snprintf(respond,sizeof(respond),"SI");
-                wrapped_fullwrite(conn_fd,respond,sizeof(respond));
+                strncpy(respons,"SI",3);
+                printf("%c \n",respons);
+                wrapped_fullwrite(conn_fd,respons,sizeof(respons));
                 break;
 
                 case 1: //Caso Richiesta da ClientS non valido
                 printf("[+] Validazione effetuata, invio report \n");
-                snprintf(respond,sizeof(respond),"NO");
-                wrapped_fullwrite(conn_fd,respond,sizeof(respond));
+                strncpy(respons,"NO",3);
+                printf("%s \n",respons);
+                wrapped_fullwrite(conn_fd,respons,sizeof(respons));
                 break;
 
                 case 2:

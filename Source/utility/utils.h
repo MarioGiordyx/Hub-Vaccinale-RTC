@@ -31,5 +31,6 @@ void printgp(struct record_gp * gp);
 void checkHash(char * Buffer, int Bsize);
 
 off_t whereisit(int fd, char * TS);
+int SeeStatus(char * TS, int fp);
 
 #endif

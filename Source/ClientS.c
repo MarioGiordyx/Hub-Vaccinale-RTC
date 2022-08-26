@@ -40,13 +40,12 @@ int main(int argc, char **argv) {
 	printf("Connesione Effetuata al serverG \n");
 
 	vd = create_Vrecord(argv[2],1,2);
-
-	wrapped_fullwrite(ServerGsk,vd,strlen(vd));
+	
+	wrapped_fullwrite(ServerGsk,vd,sizeof(struct record_validate));
 
 	printf("Package mandato al serverG, in attesa di convalida Green Pass...\n");
 
 	wrapped_fullread(ServerGsk, validation, sizeof(validation));
-	printf("Validità Green Pass: %s \n", validation);
 
 	printf("Arrivederci! \n");
 

@@ -9,6 +9,7 @@ int main( int argc, char *argv[]){
     char risposta[2];
 
     list_fd=wrapped_socket(AF_INET,SOCK_STREAM,0);
+    
 
      //SockAddr del ServerV
     server_g.sin_family = AF_INET;
@@ -41,25 +42,31 @@ int main( int argc, char *argv[]){
            struct record_validate temp_v;
            printf("[+] Lettura package dal socket \n"); 
 
-            int serverVSK = wrapped_socket(AF_INET,SOCK_STREAM,0);
-
            wrapped_fullread(conn_fd, &temp_v, sizeof(struct record_validate));
 
             printf("[+] Lettura package fatto \n");
+            int serverVSK = wrapped_socket(AF_INET,SOCK_STREAM,0);
 
-            wrapped_connect(serverVSK,(struct sockaddr_in *) &server_v, sizeof(server_v));
-            printf("[+] Connessione Effettuata al ServerV, creazione Package \n");
-
-            close(conn_fd);
+            printf("[+] Creazione Package risposta\n");
 
             //controllo provenienza package
             if(temp_v.From == 1){//proviene da ClientS
-                struct record_gp* check_gp = create_record(temp_v.TesSan, 0, 0, 1);
+                printf("[+] Richiesta Ricevuta da ClientS \n");
+                struct record_gp* check_gp;
+                char buffer[8];
+                strncpy(buffer,temp_v.TesSan,sizeof(buffer));
+                printf("%s \n",buffer);
 
-                wrapped_fullwrite(serverVSK, check_gp, sizeof(check_gp));
+                check_gp = create_record(buffer, 0, 0, 1);
+
+                printf("[+] record creato, avvio Connesione ServerV \n");
+                wrapped_connect(serverVSK,(struct sockaddr_in *) &server_v, sizeof(server_v));
+                printf("[+] Connesione Stabilita con ServerV, Send Package \n");
+
+                wrapped_fullwrite(serverVSK, check_gp, sizeof(struct record_gp));
 
                 printf("[+] Package inviato, in attesa di risposta \n");
-
+                
                 wrapped_fullread(serverVSK, risposta, sizeof(risposta));
 
                 printf("[+] Risposta ottenuta, comunicazione al ClientS della validazione \n");
@@ -77,6 +84,8 @@ int main( int argc, char *argv[]){
                 } else duration = 0;
 
                 struct record_gp * validate_gp = create_record(temp_v.TesSan, duration, temp_v.status,2);
+
+                wrapped_connect(serverVSK,(struct sockaddr_in *) &server_v, sizeof(server_v));
 
                 wrapped_fullwrite(serverVSK, validate_gp, sizeof(validate_gp));
 
