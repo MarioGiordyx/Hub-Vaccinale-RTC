@@ -5,6 +5,7 @@ int main(int argc, char **argv) {
     int ServerGsk, validation;
     struct record_validate * vd;
     struct sockaddr_in servaddr;
+	printf("%d \n",argc);
 
     //Controllo argomenti
 	if (argc != 4) {
@@ -28,7 +29,7 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-    validation= (int)argv[3] - '0';
+    validation= atoi(argv[3]);
 
     //Check validate
     if (validation < 0 || validation > 1){
@@ -48,7 +49,7 @@ int main(int argc, char **argv) {
 
 	vd = create_Vrecord(argv[2],2,validation);
     
-    wrapped_fullwrite(ServerGsk,vd,strlen(vd));
+    wrapped_fullwrite(ServerGsk,vd,sizeof(struct record_validate));
 
 	printf("Package mandato al serverG, Arrivederci !\n");
 

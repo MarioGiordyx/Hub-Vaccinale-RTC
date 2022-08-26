@@ -83,11 +83,12 @@ int main( int argc, char *argv[]){
                     duration = 6;
                 } else duration = 0;
 
-                struct record_gp * validate_gp = create_record(temp_v.TesSan, duration, temp_v.status,2);
-
                 wrapped_connect(serverVSK,(struct sockaddr_in *) &server_v, sizeof(server_v));
 
-                wrapped_fullwrite(serverVSK, validate_gp, sizeof(validate_gp));
+                struct record_gp * validate_gp;
+                validate_gp = create_record(temp_v.TesSan, duration, temp_v.status,2);
+
+                wrapped_fullwrite(serverVSK, validate_gp, sizeof(struct record_gp));
 
                 printf("[+] Package Mandato, Chiusura Fork \n");
 

@@ -20,7 +20,8 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
     pthread_mutex_unlock(&mutex);
     return 3;
     
-    } else if (gp->From == 1) { //Proviene da ServerG, richiesta di ClientS
+    } else {
+        if (gp->From == 1) { //Proviene da ServerG, richiesta di ClientS
         int stat = 0;
         pthread_mutex_lock(&mutex); 
         stat = SeeStatus(gp->TesSan,fd);
@@ -31,12 +32,16 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
         }
         return stat;
         
-    } if (gp->From == 2) {// Proviene da ServerG, richeista di ClientT
+    } else{
+        if (gp->From == 2) {// Proviene da ServerG, richeista di ClientT
         printf("[+] Cerco Recrd \n");
+        int v = 3;
 
         pthread_mutex_lock(&mutex); //Entra in mutua esclusione
-        int v = SearchModifyRecord(gp,fd);
+         v = SearchModifyRecord(gp,fd);
         pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
+
+        printf("%d\n",v);
 
         if (v == 0) {// non sia presente
             printf("[+] record non presente \n");
@@ -46,6 +51,9 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
         }
         return 2;
 
+        }
+
+        } 
     }
 
     return -1;
