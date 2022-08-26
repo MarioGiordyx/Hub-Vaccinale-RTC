@@ -43,13 +43,9 @@ struct record_validate * create_Vrecord(char * TS, int From, int status){
 
 void SearchInto(struct record_gp * gp, int fp){
     char tempo[10];
-    char TS[9];
-    char TG[9];
     off_t dove = whereisit(fp, gp->TesSan);
 
-    printf("%lld \n",dove);
-
-    if (dove!=0){
+    if (dove!=0){//Caso esista
         printf("[+] record esistente uscita \n");
         return ;
         }
@@ -74,7 +70,7 @@ int SeeStatus(char * TS, int fp) {
 
     read(fp,buffT,sizeof(buffT));
 
-    return atoi(&buffT[8]);
+    return atoi(&buffT[9]);
     } else {
         return  3;
     }
@@ -94,7 +90,7 @@ off_t whereisit(int fd, char * TS){
         realTS[8]='\0';
         printf("%s-%s\n",realTS,TS);
 
-        if (strcmp(realTS,TS)==0){
+        if (strncmp(realTS,TS,8)==0){
             return temp;
         } else {
             lseek(fd,12,SEEK_CUR);
@@ -107,22 +103,19 @@ off_t whereisit(int fd, char * TS){
 }
 
 
-int SearchModifyRecord (struct record_gp * gp, FILE * fp, FILE * fg){
-    ssize_t read;
-    struct record_gp * temp; //Temp
-    rewind(fp);
+int SearchModifyRecord (struct record_gp * gp, int fd){
+    off_t dove = whereisit(fd, gp->TesSan);
 
-    while(fread(&temp,sizeof(struct record_gp),1, fp)){
-           if (strcmp(gp->TesSan,temp->TesSan)) {
-                fseek(fp,0,SEEK_CUR); //Pointer sul posto corrente
-                temp->status=gp->status; //modifica stato
+    if (dove != 0) {//Caso esista
+    lseek(fd,dove,SEEK_SET);
 
-                //OverWrite con record modificato
-                fwrite(&temp,sizeof(temp),1,fp);
-                fwrite("\r\n",sizeof(char),1,fp);
-                return 1;
-          } 
-        }
-    return 0;
+    //Creazione rewrite
+
+    char gpp[12];
+    sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
+    write(fd,gpp,sizeof(gpp)-1);
+
+    return 1;
+    } else return 0;
 
 }

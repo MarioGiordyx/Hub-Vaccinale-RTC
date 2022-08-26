@@ -35,7 +35,7 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
         printf("[+] Cerco Recrd \n");
 
         pthread_mutex_lock(&mutex); //Entra in mutua esclusione
-       int v = SearchModifyRecord(gp,fd,fd);
+        int v = SearchModifyRecord(gp,fd);
         pthread_mutex_unlock(&mutex);  //Esce in mutua esclusione
 
         if (v == 0) {// non sia presente
