@@ -42,21 +42,23 @@ struct record_validate * create_Vrecord(char * TS, int From, int status){
 }
 
 void SearchInto(struct record_gp * gp, int fp){
-    char tempo[10];
-    off_t dove = whereisit(fp, gp->TesSan);
+    char dur[2], stat[2];
 
-    if (dove!=0){//Caso esista
+    if (whereisit(fp, gp->TesSan)!=-1){//Caso esista
         printf("[+] record esistente uscita \n");
         return ;
-        }
-
-        lseek(fp,0,SEEK_END);
+        } 
 
         printf("[+] record non trovato, inizio scrittura \n");
         //Write singoli elementi
-         char gpp[12];
-         sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
-         write(fp,gpp,sizeof(gpp)-1);
+        write(fp,gp->TesSan,sizeof(gp->TesSan));
+
+        sprintf(dur,"%d",gp->durata);
+        sprintf(stat,"%d",gp->status);
+        write(fp,stat,1);
+        write(fp,dur,1);
+        write(fp, "\n",1);
+        
         printf("[+] Scrittura Effetuata \n");
         return;
 }
@@ -65,7 +67,7 @@ int SeeStatus(char * TS, int fp) {
     char buffT[10];
     char status;
     off_t dove = whereisit(fp, TS);
-    if (dove != 0) {//Caso esista
+    if (dove != -1) {//Caso esista
     lseek(fp,dove,SEEK_SET);
 
     read(fp,buffT,sizeof(buffT));
@@ -97,8 +99,7 @@ off_t whereisit(int fd, char * TS){
             temp += 12;
         }
     }
-    temp = 0;
-    return temp;
+    return -1;
 }
 
 
@@ -106,12 +107,12 @@ int SearchModifyRecord (struct record_gp * gp, int fd){
     off_t dove = whereisit(fd, gp->TesSan);
     printf("%lld \n",dove);
 
-    if (dove != 0) {//Caso esista
+    if (dove >-1) {//Caso esista
 
     //Creazione rewrite
-    lseek(fd,(dove-1),SEEK_SET);
     char gpp[12];
     sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
+    lseek(fd,dove,SEEK_SET);
     write(fd,gpp,sizeof(gpp));
 
     return 1;
