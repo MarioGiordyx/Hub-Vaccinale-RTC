@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
     struct sockaddr_in server_v;
     socklen_t len;
     pid_t pid;
-    char respons[3];
+    char *respons;
 
     printf("[+] Open Green-Pass File \n");
 
@@ -111,16 +111,16 @@ int main(int argc, char *argv[]){
             switch(v){
                 case 0: // Caso Richiesta da ClientS valido
                 printf("[+] Validazione effetuata, invio report \n");
-                strncpy(respons,"SI",3);
-                printf("%c \n",respons);
+                respons="SI";
                 wrapped_fullwrite(conn_fd,respons,sizeof(respons));
+                printf("[+] Validazione Inviata \n");
                 break;
 
                 case 1: //Caso Richiesta da ClientS non valido
                 printf("[+] Validazione effetuata, invio report \n");
-                strncpy(respons,"NO",3);
-                printf("%s \n",respons);
+                respons="NO";
                 wrapped_fullwrite(conn_fd,respons,sizeof(respons));
+                printf("[+] Validazione Inviata \n");
                 break;
 
                 case 2:

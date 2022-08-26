@@ -6,7 +6,6 @@ int main( int argc, char *argv[]){
     struct sockaddr_in server_v , server_g;
     socklen_t len;
     pid_t pid;
-    char risposta[2];
 
     list_fd=wrapped_socket(AF_INET,SOCK_STREAM,0);
     
@@ -54,6 +53,7 @@ int main( int argc, char *argv[]){
                 printf("[+] Richiesta Ricevuta da ClientS \n");
                 struct record_gp* check_gp;
                 char buffer[8];
+                char risposta[8];
                 strncpy(buffer,temp_v.TesSan,sizeof(buffer));
                 printf("%s \n",buffer);
 

@@ -70,11 +70,11 @@ int SeeStatus(char * TS, int fp) {
     char status;
     off_t dove = whereisit(fp, TS);
     if (dove != 0) {//Caso esista
-    fseek(fp,dove,SEEK_SET);
+    lseek(fp,dove,SEEK_SET);
 
     read(fp,buffT,sizeof(buffT));
 
-    return atoi(buffT[8]);
+    return atoi(&buffT[8]);
     } else {
         return  3;
     }

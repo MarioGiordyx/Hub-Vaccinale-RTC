@@ -47,6 +47,8 @@ int main(int argc, char **argv) {
 
 	wrapped_fullread(ServerGsk, validation, sizeof(validation));
 
+	printf("Risposta Dal ServerG per TS: %s, : %s \n",argv[2],validation);
+
 	printf("Arrivederci! \n");
 
     exit(0);
