@@ -3,6 +3,13 @@
         "stdlib.h": "c",
         "utils.h": "c",
         "wrapper.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "__debug": "c",
+        "exception": "c",
+        "new": "c",
+        "optional": "c",
+        "stdexcept": "c",
+        "typeinfo": "c",
+        "variant": "c"
     }
 }

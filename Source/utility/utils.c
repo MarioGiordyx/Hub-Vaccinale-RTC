@@ -40,60 +40,57 @@ struct record_validate * create_Vrecord(char * TS, int From, int status){
     return out;
 }
 
-void SearchInto(struct record_gp * gp){
-
-    FILE *fp;
-    FILE *fg;
-    int read;
+void SearchInto(struct record_gp * gp, int fp){
     char tempo[10];
     char TS[9];
     char TG[9];
-    char c;
-    int what = 0;
+    off_t dove = whereisit(fp, gp->TesSan);
 
-    fg = fopen("gp.txt","wa");
-    fp = fopen("gp.txt","r");
-    rewind(fp);
-    
-    do {
-        c = fgetc(fp);
-        if (c == '\n') read++;
-    } while(c != EOF);
+    printf("%lld \n",dove);
 
-    rewind(fp);
-    rewind(fg);
-    while(read>0){
-            rewind(fp);
-            fscanf(fp,"%s \n",tempo);
-            
-            strncpy(TS,tempo,8);
-            TS[8]='\0';
-
-            strncpy(TG,gp->TesSan,8);
-            TG[8]='\0';
-
-            what=strcmp(TG,TS);
-
-            if(what==0){
-                printf("[+] record esistente uscita \n");
-                return;
-            }
-
-            read--;
+    if (dove!=0){
+        printf("[+] record esistente uscita \n");
+        return ;
         }
+
+        lseek(fp,0,SEEK_END);
+
         printf("[+] record non trovato, inizio scrittura \n");
         //Write singoli elementi
          char gpp[12];
          sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
-         fwrite(gpp,sizeof(gpp)-1,1,fg);
+         write(fp,gpp,sizeof(gpp)-1);
         printf("[+] Scrittura Effetuata \n");
-
-        fclose(fg);
-        fclose(fp);
         return;
 }
 
-/*
+off_t whereisit(int fd, char * TS){
+    off_t temp = 0;
+    char buffT[10];
+    char realTS[9];
+    int row;
+
+    lseek(fd,0,SEEK_SET); //Set file inizio;
+
+    while((row = read(fd,buffT,sizeof(buffT)))> 0){
+        temp++;
+        strncpy(realTS,buffT,sizeof(realTS));
+        realTS[8]='\0';
+        printf("%s-%s\n",realTS,TS);
+
+        if (strcmp(realTS,TS)==0){
+            return temp;
+        } else {
+            lseek(fd,12,SEEK_CUR);
+            temp += 12;
+        }
+    }
+    printf("non esiste \n");
+    temp = 0;
+    return temp;
+}
+
+
 int SearchModifyRecord (struct record_gp * gp, FILE * fp, FILE * fg){
     ssize_t read;
     struct record_gp * temp; //Temp
@@ -113,4 +110,3 @@ int SearchModifyRecord (struct record_gp * gp, FILE * fp, FILE * fg){
     return 0;
 
 }
-*/

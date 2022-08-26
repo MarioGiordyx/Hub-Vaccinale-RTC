@@ -4,6 +4,9 @@
 #include <strings.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 struct record_gp {
     char TesSan[8]; //ultime 8 cifre tessera sanitaria
@@ -20,11 +23,13 @@ struct record_validate {
 
 struct record_gp * create_record(char * TS, int durata, int status, int where);
 struct record_validate * create_Vrecord(char * TS, int From, int status);
-void SearchInto(struct record_gp * gp);
+void SearchInto(struct record_gp * gp, int fp);
 
-int SearchModifyRecord (struct record_gp * gp);
+int SearchModifyRecord (struct record_gp * gp, FILE * fp, FILE *fg);
 
 void printgp(struct record_gp * gp);
 void checkHash(char * Buffer, int Bsize);
+
+off_t whereisit(int fd, char * TS);
 
 #endif
