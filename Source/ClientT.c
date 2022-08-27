@@ -1,5 +1,4 @@
-#include "utility/Wrapper.h"
-#include "utility/utils.h"
+#include "utility/GP_Utils.h"
 
 int main(int argc, char **argv) {
     int ServerGsk, validation;
