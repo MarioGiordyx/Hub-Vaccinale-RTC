@@ -87,7 +87,7 @@ off_t whereisit(int fd, char * TS){
     lseek(fd,0,SEEK_SET); //Set file inizio;
 
     while((row = read(fd,buffT,10))> 0){
-        temp=+ row;
+        temp+= row;
         strncpy(realTS,buffT,sizeof(realTS));
         realTS[8]='\0';
         printf("%s-%s\n",realTS,TS);
