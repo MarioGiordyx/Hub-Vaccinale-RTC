@@ -26,7 +26,6 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
         pthread_mutex_lock(&mutex); 
         stat = SeeStatus(gp->TesSan,fd);
         pthread_mutex_unlock(&mutex);
-        printf("%d\n",stat);
         if (stat == 3){
             return 1;
         }

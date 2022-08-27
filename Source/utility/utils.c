@@ -96,7 +96,6 @@ off_t whereisit(int fd, char * TS){
         temp+= row;
         strncpy(realTS,buffT,sizeof(realTS));
         realTS[8]='\0';
-        printf("%s-%s\n",realTS,TS);
 
         if (strncmp(realTS,TS,8)==0){
             return temp;
