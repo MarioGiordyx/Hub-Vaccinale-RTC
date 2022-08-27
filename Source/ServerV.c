@@ -18,7 +18,7 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
     printf("[+] Entro in Mutua Esclusione \n");
     SearchInto(gp,fd);
     pthread_mutex_unlock(&mutex);
-    return 3;
+    return 2;
     
     } else {
         if (gp->From == 1) { //Proviene da ServerG, richiesta di ClientS
@@ -26,11 +26,10 @@ int CheckWhereFrom(struct record_gp * gp, int fd){
         pthread_mutex_lock(&mutex); 
         stat = SeeStatus(gp->TesSan,fd);
         pthread_mutex_unlock(&mutex);
-        if (stat == 3){
+        if (stat > 1){
             return 1;
-        }
-        return stat;
-        
+        } else return stat;
+       
     } else{
         if (gp->From == 2) {// Proviene da ServerG, richeista di ClientT
         printf("[+] Cerco Record \n");
@@ -115,6 +114,7 @@ int main(int argc, char *argv[]){
                 case 0: // Caso Richiesta da ClientS valido
                 printf("[+] Validazione effetuata, invio report \n");
                 respons="SI\0";
+                printf("%s \n",respons);
                 wrapped_fullwrite(conn_fd,respons,strlen(respons));
                 printf("[+] Validazione Inviata \n");
                 break;
@@ -122,6 +122,7 @@ int main(int argc, char *argv[]){
                 case 1: //Caso Richiesta da ClientS non valido
                 printf("[+] Validazione effetuata, invio report \n");
                 respons="NO\0";
+                printf("%s \n",respons);
                 wrapped_fullwrite(conn_fd,respons,strlen(respons));
                 printf("[+] Validazione Inviata \n");
                 break;

@@ -67,14 +67,16 @@ int main( int argc, char *argv[]){
 
                 printf("[+] Package inviato, in attesa di risposta \n");
                 
-                wrapped_fullread(serverVSK, risposta, sizeof(risposta));
+                wrapped_fullread(serverVSK, risposta,4);
 
                 printf("[+] Risposta ottenuta, comunicazione al ClientS della validazione \n");
+
+                close(serverVSK);
 
                 wrapped_fullwrite(conn_fd, risposta, sizeof(risposta));
 
                 close(conn_fd);
-                close(serverVSK);
+                
 
                 exit(0);
             } else if (temp_v.From == 2) {//proviene da ClientT
