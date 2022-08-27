@@ -64,18 +64,24 @@ void SearchInto(struct record_gp * gp, int fp){
 }
 
 int SeeStatus(char * TS, int fp) {
-    char buffT[10];
-    char status;
+    char buffT[2];
+    int ret;
+    
     off_t dove = whereisit(fp, TS);
+    lseek(fp,(dove-2),SEEK_SET);
     if (dove != -1) {//Caso esista
-    lseek(fp,dove,SEEK_SET);
 
     read(fp,buffT,sizeof(buffT));
 
-    return atoi(&buffT[9]);
+    if (strchr(buffT,'1')){
+        return 1;
     } else {
-        return  3;
+          
+    } if (strchr(buffT,'0')){
+        return 0;
+    } else return 3;
     }
+
 }
 
 off_t whereisit(int fd, char * TS){
