@@ -103,18 +103,23 @@ off_t whereisit(int fd, char * TS){
 }
 
 
-int SearchModifyRecord (struct record_gp * gp, int fd){
-    off_t dove = whereisit(fd, gp->TesSan);
+int SearchModifyRecord (struct record_gp * gp, int fp){
+    off_t dove = whereisit(fp, gp->TesSan);
+    char dur[2], stat[2];
     printf("%lld \n",dove);
 
     if (dove >-1) {//Caso esista
 
     //Creazione rewrite
-    char gpp[12];
-    sprintf(gpp,"%s%d%d\n",gp->TesSan,gp->status,gp->durata);
-    lseek(fd,dove,SEEK_SET);
-    write(fd,gpp,sizeof(gpp));
+    lseek(fp,(dove-10),SEEK_SET);
+    write(fp,gp->TesSan,sizeof(gp->TesSan));
 
+    sprintf(dur,"%d",gp->durata);
+    sprintf(stat,"%d",gp->status);
+    write(fp,stat,1);
+    write(fp,dur,1);
+    write(fp, "\n",1);
+    
     return 1;
     } else return 0;
 
