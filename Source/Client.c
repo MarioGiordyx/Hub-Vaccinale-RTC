@@ -1,9 +1,9 @@
 #include "utility/GP_Utils.h"
 
 int main(int argc, char **argv) {
-	int CVsk;
-	char* BufferCF;
-	struct sockaddr_in servaddr;
+	int CVsk; //File Descriptor Socket per il CentroVaccinale
+	char* BufferCF; //Buffer di scrittura/lettura 
+	struct sockaddr_in servaddr; //famiglia per la socket del Centro Vaccinale
 
 	//Controllo argomenti
 	if (argc != 3) {
@@ -39,6 +39,7 @@ int main(int argc, char **argv) {
 
 	printf("Connesione Effetuata al Centro Vaccinale \n");
 
+	//Scrittura cifre Tessera Sanitara dal buffer al Centro Vaccinale
 	wrapped_fullwrite(CVsk,BufferCF,strlen(BufferCF));
 
 	printf("Ultime 8 cifre  mandate al Centro Vaccinale, Arrivederci !\n");

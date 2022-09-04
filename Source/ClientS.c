@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(29);
 
+	//Inserimento IP in input nella famiglia tramite conversione di inet_pton
 	if(inet_pton(AF_INET,argv[1],&servaddr.sin_addr)<= 0) {
 		fprintf(stderr,"inet_pton error \n");
 		exit(1);
@@ -38,12 +39,15 @@ int main(int argc, char **argv) {
 
 	printf("Connesione Effetuata al serverG \n");
 
+	//Creazione record per il ServerG
 	vd = create_Vrecord(argv[2],1,2);
 	
+	//Scrittura del record creato sulla socket del serverG
 	wrapped_fullwrite(ServerGsk,vd,sizeof(struct record_validate));
 
 	printf("Package mandato al serverG, in attesa di convalida Green Pass...\n");
 
+	//Lettura rispsota dal ServerG
 	wrapped_fullread(ServerGsk, validation, sizeof(validation));
 
 	printf("Risposta Dal ServerG per TS: %s, : %s \n",argv[2],validation);
